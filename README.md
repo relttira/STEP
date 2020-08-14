@@ -29,12 +29,12 @@ pip install STEP
 ## Dependencies
 |Name|Version|
 |--|--|
-|[imageio](https://imageio.github.io)|2.8.0|
-|[Matplotlib](https://matplotlib.org)|3.2.1|
-|[netCDF4](https://unidata.github.io/netcdf4-python/netCDF4/index.html)|1.5.3|
-|[NumPy](https://numpy.org)|1.18.5|
-|[scikit-image](https://scikit-image.org)|0.17.2|
-|[SciPy](https://scipy.org)|1.4.1|
+|[imageio](https://imageio.readthedocs.io/en/stable/installation.html)|2.8.0|
+|[Matplotlib](https://matplotlib.org/users/installing.html)|3.2.1|
+|[netCDF4](https://pypi.org/project/netCDF4/)|1.5.3|
+|[NumPy](https://numpy.org/install/)|1.18.5|
+|[scikit-image](https://scikit-image.org/docs/stable/install.html)|0.17.2|
+|[SciPy](https://scipy.org/install.html)|1.4.1|
 
  *Note: [Basemap](matplotlib.org/basemap) is necessary when using the example function in `plot_with_map.py`.*
 ## Usage
