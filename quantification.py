@@ -56,8 +56,6 @@ def get_duration(storms: np.ndarray, time_interval: float) -> np.ndarray:
     # and the number of storms
     total_storms = len(np.unique(storms))
 
-    print(total_storms)
-
     # and an array to store the result in, where the value found at each index corresponds to the duration that storm
     result = np.zeros(total_storms)
 
