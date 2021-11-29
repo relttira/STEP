@@ -16,8 +16,8 @@ def quantify(tracked_storms: np.ndarray, precip_data: np.ndarray, lat_data: np.n
     dimensions 1 x Rows x Cols.
     :param time_interval: the period between temporal 'snapshots', given as a float. The user should interpret the
     duration results in terms of the time unit implied here.
-    :param pixel_size: the area one grid cell represents in the data. The user should interpret the size and
-    average intensity results in terms of the unit of area given.
+    :param pixel_size: the length/width one grid cell represents in the data. The user should interpret the size and
+    average intensity results in terms of the distance unit implied here squared.
     :return: A tuple of size four containing the duration of each storm, as well as its size, intensity,
     and central location at each time step, in this order.
     """
@@ -82,10 +82,10 @@ def get_duration(storms: np.ndarray, time_interval: float) -> np.ndarray:
 
 
 def get_size(storms: np.ndarray, grid_cell_size: float) -> np.ndarray:
-    """Computes the size (in the unit of area of grid_cell_size) of each storm across all time slices given.
+    """Computes the size (in the distance unit of grid_cell_size) of each storm across all time slices given.
     :param storms: the tracked storms returned by the tracking algorithm, given as an array of dimensions
     Time x Rows x Cols.
-    :param grid_cell_size: the area one grid cell represents in the data, given as a float.
+    :param grid_cell_size: the length/width one grid cell represents in the data, given as a float.
     :return: a lifetime x total_storms array where the value found at [y][x] corresponds to the size of the storm at t=y,
     storm=x. Except in the case of index 0, which is always 0 for any t.
     """
@@ -191,6 +191,10 @@ def get_central_loc(storms: np.ndarray, precip: np.ndarray, lats: np.ndarray, lo
     # initialize an array to store our result, but of type object to allow us to store an array in each cell
     result = np.zeros((lifetime, total_storms)).astype(object)
 
+    # convert lats and longs from degree to radian
+    lats = lats / 180. * np.pi
+    longs = longs / 180. * np.pi
+
     # create arrays of x, y, and z values for the cartesian grid in R3
     x_array = np.cos(lats) * np.cos(longs)
     y_array = np.cos(lats) * np.sin(longs)
@@ -223,9 +227,14 @@ def get_central_loc(storms: np.ndarray, precip: np.ndarray, lats: np.ndarray, lo
                 h_avg = sqrt((x_avg ** 2) + (y_avg ** 2))
 
                 # the central location on earth's surface is given by the following
-                central_location[0] = 2 * atan(y_avg / (sqrt((y_avg ** 2) + (x_avg ** 2)) + x_avg))
-                central_location[1] = 2 * atan(z_avg / (sqrt((z_avg ** 2) + (h_avg ** 2)) + h_avg))
-
+                tmp_lon = atan(y_avg / x_avg)/np.pi*180
+                tmp_lat = atan(z_avg / h_avg)/np.pi*180
+                if tmp_lon > 0:
+                    ### convert to degree west is the longitude is consider in degree east
+                    tmp_lon -= 180
+                # put longitude and latitude to the first and second dimensions
+                central_location[0] = tmp_lon
+                central_location[1] = tmp_lat
                 # and we place it in the appropriate spot in the array
                 result[time_index][label] = central_location
 
