@@ -16,8 +16,8 @@ def quantify(tracked_storms: np.ndarray, precip_data: np.ndarray, lat_data: np.n
     dimensions 1 x Rows x Cols.
     :param time_interval: the period between temporal 'snapshots', given as a float. The user should interpret the
     duration results in terms of the time unit implied here.
-    :param pixel_size: the length/width one grid cell represents in the data. The user should interpret the size and
-    average intensity results in terms of the distance unit implied here squared.
+    :param pixel_size: the area one grid cell represents in the data. The user should interpret the size and
+    average intensity results in terms of the unit of area given.
     :return: A tuple of size four containing the duration of each storm, as well as its size, intensity,
     and central location at each time step, in this order.
     """
@@ -82,10 +82,10 @@ def get_duration(storms: np.ndarray, time_interval: float) -> np.ndarray:
 
 
 def get_size(storms: np.ndarray, grid_cell_size: float) -> np.ndarray:
-    """Computes the size (in the distance unit of grid_cell_size) of each storm across all time slices given.
+    """Computes the size (in the unit of area of grid_cell_size) of each storm across all time slices given.
     :param storms: the tracked storms returned by the tracking algorithm, given as an array of dimensions
     Time x Rows x Cols.
-    :param grid_cell_size: the length/width one grid cell represents in the data, given as a float.
+    :param grid_cell_size: the area one grid cell represents in the data, given as a float.
     :return: a lifetime x total_storms array where the value found at [y][x] corresponds to the size of the storm at t=y,
     storm=x. Except in the case of index 0, which is always 0 for any t.
     """
@@ -183,7 +183,7 @@ def get_central_loc(storms: np.ndarray, precip: np.ndarray, lats: np.ndarray, lo
     :return: a lifetime x total_storms array where the value found at [y][x] corresponds to the central location of the
     storm at t=y, storm=x. Except in the case of index 0, which is always 0 for any t.
     """
-
+    
     lifetime = storms.shape[0]
 
     total_storms = len(np.unique(storms))
